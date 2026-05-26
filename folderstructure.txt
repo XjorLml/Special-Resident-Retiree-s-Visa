@@ -1,0 +1,170 @@
+src/
+│
+├── app/
+│   │
+│   ├── (auth)/                          # Public auth routes
+│   │   ├── login/
+│   │   │   └── page.tsx
+│   │   ├── register/
+│   │   │   └── page.tsx
+│   │   └── forgot-password/
+│   │       └── page.tsx
+│   │
+│   ├── (admin)/                         # Admin route group
+│   │   ├── layout.tsx                   # Role gate: assertRole('admin')
+│   │   │
+│   │   ├── dashboard/
+│   │   │   └── page.tsx                 # Analytics overview
+│   │   │
+│   │   ├── applicants/
+│   │   │   ├── page.tsx                 # Applicant list + filters
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx             # Applicant detail
+│   │   │       ├── documents/
+│   │   │       │   └── page.tsx         # Document review
+│   │   │       └── application/
+│   │   │           └── page.tsx         # Approve/reject
+│   │   │
+│   │   ├── applications/
+│   │   │   ├── page.tsx                 # All applications + status filter
+│   │   │   └── [id]/
+│   │   │       └── page.tsx             # Application detail + status update
+│   │   │
+│   │   ├── payments/
+│   │   │   ├── page.tsx                 # Payment logs/history
+│   │   │   └── [id]/
+│   │   │       └── page.tsx             # Payment detail
+│   │   │
+│   │   ├── services/
+│   │   │   ├── page.tsx                 # Service/package list
+│   │   │   ├── new/
+│   │   │   │   └── page.tsx             # Create service
+│   │   │   └── [id]/
+│   │   │       └── page.tsx             # Edit service/package
+│   │   │
+│   │   └── messages/
+│   │       ├── page.tsx                 # All inquiries
+│   │       └── [id]/
+│   │           └── page.tsx             # Thread view
+│   │
+│   ├── (applicant)/                     # Applicant route group
+│   │   ├── layout.tsx                   # Role gate: assertRole('applicant')
+│   │   │
+│   │   ├── dashboard/
+│   │   │   └── page.tsx                 # Status overview + notifications
+│   │   │
+│   │   ├── services/
+│   │   │   ├── page.tsx                 # Browse SRRV packages
+│   │   │   └── [id]/
+│   │   │       └── page.tsx             # Package detail + purchase CTA
+│   │   │
+│   │   ├── application/
+│   │   │   ├── new/
+│   │   │   │   └── page.tsx             # Multi-step application form
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx             # Application tracking
+│   │   │       └── documents/
+│   │   │           └── page.tsx         # Document upload per application
+│   │   │
+│   │   ├── payments/
+│   │   │   ├── page.tsx                 # Payment history
+│   │   │   └── [id]/
+│   │   │       └── page.tsx             # Payment receipt/detail
+│   │   │
+│   │   ├── messages/
+│   │   │   ├── page.tsx                 # Inbox
+│   │   │   └── [id]/
+│   │   │       └── page.tsx             # Thread view
+│   │   │
+│   │   └── profile/
+│   │       └── page.tsx                 # Profile management
+│   │
+│   ├── api/
+│   │   ├── auth/
+│   │   │   └── [...nextauth]/
+│   │   │       └── route.ts
+│   │   └── webhooks/
+│   │       └── payment/
+│   │           └── route.ts             # Payment gateway webhook
+│   │
+│   ├── unauthorized/
+│   │   └── page.tsx
+│   ├── layout.tsx                       # Root layout + Providers
+│   └── page.tsx                         # Landing page / redirect
+│
+│
+├── components/
+│   ├── ui/                              # shadcn generated — do not edit
+│   │
+│   ├── shared/                          # Used by both admin + applicant
+│   │   ├── file-uploader.tsx
+│   │   ├── status-badge.tsx
+│   │   ├── data-table.tsx
+│   │   ├── notification-bell.tsx
+│   │   └── message-thread.tsx
+│   │
+│   ├── admin/                           # Admin-only components
+│   │   ├── nav.tsx
+│   │   ├── applicant-table.tsx
+│   │   ├── application-review-card.tsx
+│   │   ├── document-viewer.tsx
+│   │   ├── analytics-chart.tsx
+│   │   └── status-updater.tsx
+│   │
+│   └── applicant/                       # Applicant-only components
+│       ├── nav.tsx
+│       ├── application-stepper.tsx
+│       ├── document-checklist.tsx
+│       ├── payment-summary.tsx
+│       └── tracking-timeline.tsx
+│
+│
+├── lib/
+│   │
+│   ├── supabase/                        # Infrastructure layer
+│   │   ├── client.ts                    # Browser client
+│   │   ├── server.ts                    # Server client
+│   │   └── middleware.ts                # Middleware client
+│   │
+│   ├── auth/                            # Domain layer
+│   │   └── roles.ts                     # assertRole(), getUserRole()
+│   │
+│   └── utils.ts                         # cn(), formatDate(), etc.
+│
+│
+├── actions/                             # Application layer (Server Actions)
+│   ├── auth.ts                          # login, register, logout
+│   ├── application.ts                   # create, update, submit
+│   ├── documents.ts                     # upload, delete, verify
+│   ├── payments.ts                      # initiate, confirm, refund
+│   ├── messages.ts                      # send, read, reply
+│   ├── services.ts                      # create, update, archive
+│   └── admin/
+│       ├── applicants.ts                # manage applicant accounts
+│       ├── review.ts                    # approve, reject, request-changes
+│       └── status.ts                    # bulk status updates
+│
+│
+├── hooks/                               # TanStack Query hooks
+│   ├── use-application.ts
+│   ├── use-documents.ts
+│   ├── use-messages.ts
+│   ├── use-notifications.ts
+│   └── use-payments.ts
+│
+│
+├── schemas/                             # Zod schemas (Domain layer)
+│   ├── application.ts
+│   ├── document.ts
+│   ├── payment.ts
+│   ├── message.ts
+│   ├── profile.ts
+│   └── service.ts
+│
+│
+├── types/
+│   ├── supabase.ts                      # Generated — do not edit
+│   └── index.ts                         # App-level types + enums
+│
+│
+└── middleware.ts                        # Auth + role routing
