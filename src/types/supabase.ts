@@ -359,10 +359,9 @@ export type Database = {
         | "maya"
       payment_status: "pending" | "paid" | "failed" | "refunded"
       service_type:
-        | "srrv_classic"
-        | "srrv_smile"
-        | "srrv_human_touch"
-        | "srrv_courtesy"
+        | "basic"
+        | "premium"
+        | "vip"
       user_role: "admin" | "applicant"
     }
     CompositeTypes: {
