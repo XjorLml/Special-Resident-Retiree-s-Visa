@@ -10,137 +10,115 @@ export type Json =
 // ENUMS
 // ─────────────────────────────────────────────
 
-export type UserRole = 'admin' | 'applicant'
-
-export type Gender = 'male' | 'female' | 'other'
-
-export type Nationality =
-  | 'filipino'
-  | 'american'
-  | 'japanese'
-  | 'korean'
-  | 'chinese'
-  | 'other'
+export type Sex = 'male' | 'female'
 
 export type ApplicationStatus =
-  | 'draft'
-  | 'submitted'
-  | 'under_review'
-  | 'pending_documents'
+  | 'processing'
+  | 'paused'
   | 'approved'
   | 'rejected'
 
 export type DocumentStatus =
-  | 'pending'
-  | 'verified'
+  | 'processing'
+  | 'accepted'
   | 'rejected'
-
-export type DocumentType =
-  | 'passport'
-  | 'birth_certificate'
-  | 'marriage_certificate'
-  | 'bank_statement'
-  | 'medical_certificate'
-  | 'photo'
-  | 'other'
-
-export type ServiceType =
-  | 'srrv_classic'
-  | 'srrv_smile'
-  | 'srrv_human_touch'
-  | 'srrv_courtesy'
+  | 'action need'
 
 export type PaymentStatus =
+  | 'processing'
   | 'pending'
-  | 'paid'
-  | 'failed'
-  | 'refunded'
+  | 'cancelled'
+  | 'success'
 
-export type PaymentMethod =
+export type PaymentMethods =
   | 'credit_card'
   | 'debit_card'
-  | 'bank_transfer'
-  | 'gcash'
-  | 'maya'
+  | 'e-wallet'
+
+export type ServiceType =
+  | 'basic'
+  | 'premium'
+  | 'vip'
 
 // ─────────────────────────────────────────────
 // TABLE ROWS
 // ─────────────────────────────────────────────
 
 export interface UserRow {
-  id: number
+  id: string
   email: string
   password: string
-  role: UserRole
   created_at: string
 }
 
 export interface AdminProfileRow {
-  user_id: number
+  user_id: string
   name: string
 }
 
 export interface ClientProfileRow {
-  user_id: number
+  user_id: string
   name: string
-  gender: Gender | null
-  nationality: Nationality | null
+  sex: Sex | null
+  birthday: string | null
+  nationality: string
   age: number | null
-  address: string | null
+  address: string
+}
+
+export interface ServiceRow {
+  id: number
+  type: ServiceType
+  price: number | null
+  description: string | null
+  is_available: boolean | null
+}
+
+export interface PaymentRow {
+  id: number
+  user_id: string
+  status: PaymentStatus
+  amount: number | null
+  transaction_code: string
+  payment_method: PaymentMethods | null
+  created_at: string | null
+  updated_at: string | null
+}
+
+export interface NotificationRow {
+  id: number
+  user_id: string
+  notification: string
+  is_read: boolean
 }
 
 export interface ApplicationRow {
   id: number
-  client_id: number
+  user_id: string
   service_type: ServiceType
   application_code: string
   status: ApplicationStatus
-  created_at: string
-  updated_at: string
+  created_at: string | null
+  updated_at: string | null
 }
 
 export interface DocumentRow {
   id: number
   application_id: number
   path: string
-  type: DocumentType
-  status: DocumentStatus
-  created_at: string
+  type: string | null
+  status: DocumentStatus | null
+  created_at: string | null
+  updated_at: string | null
 }
 
-export interface ServiceRow {
-  id: number
-  type: ServiceType
-  price: number
-  description: string | null
-  is_available: boolean
-}
-
-export interface PaymentRow {
-  id: number
-  application_id: number
-  client_id: number
-  status: PaymentStatus
-  amount: number
-  transaction_code: string | null
-  payment_method: PaymentMethod
-  created_at: string
-  updated_at: string
-}
-
+// for review
 export interface MessageRow {
   id: number
-  sender_id: number
-  receiver_id: number
+  sender_id: string
+  receiver_id: string
   message: string
   created_at: string
-}
-
-export interface NotificationRow {
-  id: number
-  client_id: number
-  application_id: number
-  notification: string
 }
 
 // ─────────────────────────────────────────────
@@ -150,63 +128,62 @@ export interface NotificationRow {
 export interface UserInsert {
   email: string
   password: string
-  role: UserRole
 }
 
 export interface AdminProfileInsert {
-  user_id: number
+  user_id: string
   name: string
 }
 
 export interface ClientProfileInsert {
-  user_id: number
+  user_id: string
   name: string
-  gender?: Gender | null
-  nationality?: Nationality | null
-  age?: number | null
-  address?: string | null
+  sex: Sex | null
+  birthday: string | null
+  nationality: string
+  age: number | null
+  address: string
+}
+
+export interface ServiceInsert {
+  type: ServiceType
+  price: number | null
+  description: string | null
+  is_available: boolean | null
+}
+
+export interface PaymentInsert {
+  user_id: string
+  status: PaymentStatus
+  amount: number | null
+  transaction_code: string
+  payment_method: PaymentMethods | null
+}
+
+export interface NotificationInsert {
+  user_id: string
+  notification: string
 }
 
 export interface ApplicationInsert {
-  client_id: number
+  user_id: string
   service_type: ServiceType
   application_code: string
-  status?: ApplicationStatus
+  status: ApplicationStatus | null
 }
 
 export interface DocumentInsert {
   application_id: number
   path: string
-  type: DocumentType
-  status?: DocumentStatus
+  type: string | null
+  status: DocumentStatus | null
 }
 
-export interface ServiceInsert {
-  type: ServiceType
-  price: number
-  description?: string | null
-  is_available?: boolean
-}
-
-export interface PaymentInsert {
-  application_id: number
-  client_id: number
-  status?: PaymentStatus
-  amount: number
-  transaction_code?: string | null
-  payment_method: PaymentMethod
-}
-
+// for review
 export interface MessageInsert {
-  sender_id: number
-  receiver_id: number
+  sender_id: string
+  receiver_id: string
   message: string
-}
-
-export interface NotificationInsert {
-  client_id: number
-  application_id: number
-  notification: string
 }
 
 // ─────────────────────────────────────────────
@@ -216,12 +193,14 @@ export interface NotificationInsert {
 export type UserUpdate = Partial<Omit<UserRow, 'id' | 'created_at'>>
 export type AdminProfileUpdate = Partial<Omit<AdminProfileRow, 'user_id'>>
 export type ClientProfileUpdate = Partial<Omit<ClientProfileRow, 'user_id'>>
-export type ApplicationUpdate = Partial<Omit<ApplicationRow, 'id' | 'created_at'>>
-export type DocumentUpdate = Partial<Omit<DocumentRow, 'id' | 'created_at'>>
 export type ServiceUpdate = Partial<Omit<ServiceRow, 'id'>>
-export type PaymentUpdate = Partial<Omit<PaymentRow, 'id' | 'created_at'>>
+export type PaymentUpdate = Partial<Omit<PaymentRow, 'id' | 'user_id' | 'created_at'>>
+export type NotificationUpdate = Partial<Omit<NotificationRow, 'id' | 'user_id'>>
+export type ApplicationUpdate = Partial<Omit<ApplicationRow, 'id' | 'user_id' | 'created_at'>>
+export type DocumentUpdate = Partial<Omit<DocumentRow, 'id' | 'application_id' | 'created_at'>>
+
+// for review
 export type MessageUpdate = Partial<Omit<MessageRow, 'id' | 'created_at'>>
-export type NotificationUpdate = Partial<Omit<NotificationRow, 'id'>>
 
 // ─────────────────────────────────────────────
 // DATABASE SCHEMA
@@ -264,17 +243,58 @@ export interface Database {
           }
         ]
       }
+      services: {
+        Row: ServiceRow
+        Insert: ServiceInsert
+        Update: ServiceUpdate
+        Relationships: []
+      }
+      payments: {
+        Row: PaymentRow
+        Insert: PaymentInsert
+        Update: PaymentUpdate
+        Relationships: [
+          {
+            foreignKeyName: 'payments_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      notifications: {
+        Row: NotificationRow
+        Insert: NotificationInsert
+        Update: NotificationUpdate
+        Relationships: [
+          {
+            foreignKeyName: 'notifications_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
       applications: {
         Row: ApplicationRow
         Insert: ApplicationInsert
         Update: ApplicationUpdate
         Relationships: [
           {
-            foreignKeyName: 'applications_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: 'applications_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'applications_service_type_fkey'
+            columns: ['service_type']
+            isOneToOne: false
+            referencedRelation: 'services'
+            referencedColumns: ['type']
           }
         ]
       }
@@ -292,33 +312,8 @@ export interface Database {
           }
         ]
       }
-      services: {
-        Row: ServiceRow
-        Insert: ServiceInsert
-        Update: ServiceUpdate
-        Relationships: []
-      }
-      payments: {
-        Row: PaymentRow
-        Insert: PaymentInsert
-        Update: PaymentUpdate
-        Relationships: [
-          {
-            foreignKeyName: 'payments_application_id_fkey'
-            columns: ['application_id']
-            isOneToOne: false
-            referencedRelation: 'applications'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'payments_client_id_fkey'
-            columns: ['client_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          }
-        ]
-      }
+
+      // for review
       messages: {
         Row: MessageRow
         Insert: MessageInsert
@@ -340,27 +335,6 @@ export interface Database {
           }
         ]
       }
-      notifications: {
-        Row: NotificationRow
-        Insert: NotificationInsert
-        Update: NotificationUpdate
-        Relationships: [
-          {
-            foreignKeyName: 'notifications_client_id_fkey'
-            columns: ['client_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'notifications_application_id_fkey'
-            columns: ['application_id']
-            isOneToOne: false
-            referencedRelation: 'applications'
-            referencedColumns: ['id']
-          }
-        ]
-      }
     }
     Views: {
       [_ in never]: never
@@ -369,15 +343,12 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      user_role: UserRole
-      gender: Gender
-      nationality: Nationality
+      sex: Sex
       application_status: ApplicationStatus
       document_status: DocumentStatus
-      document_type: DocumentType
       service_type: ServiceType
       payment_status: PaymentStatus
-      payment_method: PaymentMethod
+      payment_method: PaymentMethods
     }
     CompositeTypes: {
       [_ in never]: never
