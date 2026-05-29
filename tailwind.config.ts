@@ -77,6 +77,12 @@ const config: Config = {
             950:  "#111418",
             1000: "#08090b",
           },
+
+           // accent
+          goldAccent: {
+           1: "#c9a84c",
+           2: "#c5bfa8"
+          }
         },
 
         // ── Heritage Trust semantic tokens ──────────────────────────────────

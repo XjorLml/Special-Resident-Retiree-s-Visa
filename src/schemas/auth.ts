@@ -22,13 +22,34 @@ export type LoginInput = z.infer<typeof loginSchema>
 
 export const registerSchema = z
   .object({
-    name: z
+    firstName: z
       .string()
-      .min(2, 'Name must be at least 2 characters'),
+      .min(1, 'First Name is required')
+      .min(2, 'Fisrt name must be at least 2 characters'),
+    surname: z
+      .string()
+      .min(1, 'surname is required')
+      .min(2, 'Surname must be at least 2 characters'), 
     email: z
       .string()
       .min(1, 'Email is required')
       .email('Enter a valid email address'),
+    sex: z
+      .enum(['male', 'female'])
+      .optional(),
+    birthday: z
+      .string()
+      .min(1, 'Birthday is required'),
+    age: z
+      .int()
+      .optional(),
+    nationality: z
+      .string(),
+    address: z
+      .string(),
+    phoneNumber: z
+      .string()
+      .min(1, 'Phone number is required'),
     password: z
       .string()
       .min(8, 'Password must be at least 8 characters'),

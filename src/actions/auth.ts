@@ -62,18 +62,33 @@ export async function registerAction(input: RegisterInput): Promise<ActionResult
 
   const supabase = await createClient()
 
+  const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+  const firstName = capitalize(parsed.data?.firstName);
+  const surname = capitalize(parsed.data?.surname);
+  const fullName = `${firstName} ${surname}`; // capitalize first leetter and combine firsname and lastname 
+  console.log(fullName)
+  console.log(parsed.data.email)
+  console.log(parsed.data.birthday)
+
+
   const { data, error: signUpError } = await supabase.auth.signUp({
-    email: parsed.data.email,
+    email: parsed.data.email.toLowerCase(),
     password: parsed.data.password,
     options: {
       data: {
-        role: 'applicant',
-        name: parsed.data.name,
+      name: fullName,
+      sex: parsed.data.sex,
+      birthday: parsed.data.birthday,
+      nationality: parsed.data.nationality,
+      age: 25,
+      address: parsed.data.address,
       },
     },
   })
 
   if (signUpError) {
+    console.error('signup error:', signUpError)
     return { success: false, error: signUpError.message }
   }
 
@@ -81,16 +96,28 @@ export async function registerAction(input: RegisterInput): Promise<ActionResult
     return { success: false, error: 'Failed to create account. Please try again.' }
   }
 
-  const { error: profileError } = await supabase
-    .from('client_profiles')
-    .insert({
-      user_id: Number(data.user.id),
-      name: parsed.data.name,
-    })
-
-  if (profileError) {
-    return { success: false, error: profileError.message }
+  if(data.user && !data.session) {
+    console.error('A confirmation email has been sent. Please verify your email before logging in.')
+    return { success: false, error: 'A confirmation email has been sent. Please verify your email before logging in.'}
   }
+
+  // ! no need to manual insert bcoz of options and triggers 
+  // const { error: profileError } = await supabase
+  //   .from('client_profiles')
+  //   .insert({
+  //     user_id: data.user.id,
+  //     name: fullName,
+  //     sex: parsed.data.sex,
+  //     birthday: parsed.data.birthday,
+  //     nationality: parsed.data.nationality,
+  //     age: parsed.data.age,
+  //     address: parsed.data.address,
+  //   })
+
+  // if (profileError) {
+  //   console.error('Profile insert error:', profileError) 
+  //   return { success: false, error: profileError.message }
+  // }
 
   revalidatePath('/', 'layout')
   redirect('/applicant/dashboard')
