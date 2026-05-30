@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import type { Provider } from '@supabase/supabase-js'
+
 import {
   loginSchema,
   registerSchema,
@@ -120,7 +121,7 @@ export async function registerAction(input: RegisterInput): Promise<ActionResult
   // }
 
   revalidatePath('/', 'layout')
-  redirect('/applicant/dashboard')
+  redirect('/confirm-email')
 }
 
 // ─────────────────────────────────────────────
