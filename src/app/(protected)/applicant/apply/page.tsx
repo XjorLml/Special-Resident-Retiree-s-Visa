@@ -117,13 +117,13 @@ export default function ApplyPage() {
         newId = maxIdData[0].id + 1
       }
 
-      const insertData = {
+      const insertData: TablesInsert<'applications'> = {
         id: newId,
         user_id: data.user_id,
         application_code: data.application_code,
         service_type: data.service_type,
-        status: data.status ?? 'processing',
-      } satisfies TablesInsert<'applications'>
+        ...(data.status !== undefined && { status: data.status }),
+      }
 
       const { error } = await supabase
         .from('applications')
@@ -145,8 +145,8 @@ export default function ApplyPage() {
     reset({
       user_id: app.user_id,
       application_code: app.application_code,
-      service_type: app.service_type as ApplicationForm['service_type'],
-      status: app.status ?? undefined,
+      service_type: app.service_type,
+      status: app.status || undefined,
     })
   }
 
@@ -328,7 +328,7 @@ export default function ApplyPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Created At</p>
-                    <p className="font-medium">{app.created_at ? new Date(app.created_at).toLocaleString() : 'N/A'}</p>
+                    <p className="font-medium">{new Date(app.created_at).toLocaleString()}</p>
                   </div>
                   {app.updated_at && (
                     <div>
