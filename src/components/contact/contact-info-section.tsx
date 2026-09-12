@@ -17,7 +17,7 @@ export default function ContactInfoSection() {
 
             <InfoCard icon={<Mail className="w-5 h-5"/>} title="Email" primaryText="admin.retirewellsrrv@gmail.com"  secondaryText={<>For general inquiries and support</>}/>
 
-            <InfoCard icon={<MapPin className="w-5 h-5" />} title="Office" primaryText="RetireWell Philippines" secondaryText={<>123 Ayala Avenue, Makati City <br /> Metro Manila, Philippines 1226</>} />
+            <InfoCard icon={<MapPin className="w-5 h-5" />} title="Office" primaryText="RetireWell Philippines" secondaryText={<>Unit 2201 22/F The Peak Bldg. 107 L.P. Leviste Street, Bel Air <br /> Makati City, Metro Manila, Philippines 1226</>} />
 
             <InfoCard icon={<Clock className="w-5 h-5" />} title="Business Hours" primaryText="Monday - Friday" secondaryText={<>9:00 AM - 6:00 PM (PST)</>} />
         </div>
